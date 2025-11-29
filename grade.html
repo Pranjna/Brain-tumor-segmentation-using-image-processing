@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tumor Grading Application</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Tumor Grading Application</h1>
+        <form id="tumor-form">
+            <label for="tumor-type">Tumor Type:</label>
+            <input type="text" id="tumor-type" name="tumor-type"><br><br>
+            <label for="tumor-grade">Tumor Grade:</label>
+            <select id="tumor-grade" name="tumor-grade">
+                <option value="1">Grade 1</option>
+                <option value="2">Grade 2</option>
+                <option value="3">Grade 3</option>
+                <option value="4">Grade 4</option>
+            </select><br><br>
+            <button id="submit-btn">Generate Report</button>
+        </form>
+        <div id="report-container"></div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
+
+
+
+

@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TUMOR VUE - Registration</title>
+    <style>
+        body {
+            background-color: #0b0c1b;
+            color: white;
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        .register-container {
+            background-color: #1a1a1a;
+            padding: 40px;
+            border: 1px solid white;
+            border-radius: 10px;
+            width: 400px;
+            text-align: center;
+        }
+        .register-container h1 {
+            margin-bottom: 20px;
+        }
+        .register-container input[type="text"],
+        .register-container input[type="email"],
+        .register-container input[type="tel"],
+        .register-container input[type="password"] {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border: none;
+            border-radius: 5px;
+        }
+        .register-container button {
+            width: 100%;
+            padding: 10px;
+            background-color: #333;
+            color: white;
+            border: 1px solid white;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 20px;
+        }
+        .register-container button:hover {
+            background-color: #444;
+        }
+    </style>
+</head>
+<body>
+    <div class="register-container">
+        <h1>Registration</h1>
+        <form id="registerForm" action="#" method="POST" onsubmit="return validateForm()">
+    <input type="text" name="name" id="name" placeholder="Name" required>
+    <input type="text" name="doctor_id" id="doctor_id" placeholder="Doctor ID" required>
+    <input type="tel" name="phone" id="phone" placeholder="Phone Number" required>
+    <input type="email" name="email" id="email" placeholder="Email" required>
+    <input type="password" name="password" id="password" placeholder="Set Password" required>
+    <input type="password" name="confirm_password" id="confirm_password" placeholder="Confirm Password" required>
+    <button type="submit">Register</button>
+    <p class="login-text">Already have an account? <a href="login_1.html">Login here</a></p>
+  </form>
+    </div>
+    <script>function validateForm() {
+      const name = document.getElementById("name").value.trim();
+      const doctorId = document.getElementById("doctor_id").value.trim();
+      const phone = document.getElementById("phone").value.trim();
+      const email = document.getElementById("email").value.trim();
+      const password = document.getElementById("password").value;
+      const confirmPassword = document.getElementById("confirm_password").value;
+
+      const doctorIdRegex = /^[a-zA-Z0-9]{4,}$/;
+      const phoneRegex = /^[0-9]{10}$/;
+
+      if (name === "") {
+        alert("Name is required.");
+        return false;
+      }
+
+      if (!doctorIdRegex.test(doctorId)) {
+        alert("Doctor ID must be at least 4 alphanumeric characters.");
+        return false;
+      }
+
+      if (!phoneRegex.test(phone)) {
+        alert("Phone number must be 10 digits.");
+        return false;
+      }
+
+      // Email field uses built-in validation
+
+      if (password.length < 6) {
+        alert("Password must be at least 6 characters.");
+        return false;
+      }
+
+      if (password !== confirmPassword) {
+        alert("Passwords do not match.");
+        return false;
+      }
+
+      // All validations passed
+      return true;
+    }
+        document.querySelector('form').addEventListener('submit', function(event) {
+            event.preventDefault();
+            alert('Registration successful! You can now log in with your credentials.');
+            window.location.href = 'main_1.html';
+        });
+    </script>
+</body>s
+</html>
