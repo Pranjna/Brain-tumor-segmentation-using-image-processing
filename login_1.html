@@ -54,44 +54,54 @@
 <body>
     <div class="login-container">
         <h1>Login </h1>
-        <form id="loginForm" action="#" method="POST" onsubmit="return validateForm()">
-  <input type="text" name="doctor_id" id="doctor_id" placeholder="Doctor ID" required>
-  <input type="email" name="email" id="email" placeholder="Email" required>
-  <input type="password" name="password" id="password" placeholder="Password" required>
-  <button class="submit">Login</button>
-  <p class="signup-text">Not registered? <a href="try_reg.html">Create an account</a></p>
+                <form id="loginForm" action="/login" method="POST" onsubmit="return validateForm()">
+    <input type="text" name="doctor_id" id="doctor_id" placeholder="Doctor ID" required>
+    <input type="email" name="email" id="email" placeholder="Email" required>
+    <input type="password" name="password" id="password" placeholder="Password" required>
+    <div id="message" style="color: #ffcccc; margin-bottom:10px;"></div>
+    <button type="submit" class="submit">Login</button>
+    <p class="signup-text">Not registered? <a href="try_reg.html">Create an account</a></p>
 </form>
     </div>
-    <script>
-        function validateForm() {
-    const doctorId = document.getElementById("doctor_id").value.trim();
-    const email = document.getElementById("email").value.trim();
-    const password = document.getElementById("password").value;
+        <script>
+                function validateForm() {
+        const doctorId = document.getElementById("doctor_id").value.trim();
+        const email = document.getElementById("email").value.trim();
+        const password = document.getElementById("password").value;
 
-    // Doctor ID: must be alphanumeric, min 4 characters
-    const doctorIdRegex = /^[a-zA-Z0-9]{4,}$/;
-    if (!doctorIdRegex.test(doctorId)) {
-      alert("Doctor ID must be at least 4 alphanumeric characters.");
-      return false;
+        // Doctor ID: must be alphanumeric, min 4 characters
+        const doctorIdRegex = /^[a-zA-Z0-9]{4,}$/;
+        if (!doctorIdRegex.test(doctorId)) {
+            alert("Doctor ID must be at least 4 alphanumeric characters.");
+            return false;
+        }
+
+        // Email: browser handles basic email validation, no need to repeat
+
+        // Password: at least 6 characters
+        if (password.length < 6) {
+            alert("Password must be at least 6 characters long.");
+            return false;
+        }
+
+        // Passed all validations
+        return true;
     }
-
-    // Email: browser handles basic email validation, no need to repeat
-
-    // Password: at least 6 characters
-    if (password.length < 6) {
-      alert("Password must be at least 6 characters long.");
-      return false;
-    }
-
-    // Passed all validations
-    return true;
-  }
-        // JavaScript for form submission can be added here
-        document.querySelector('.submit').addEventListener('click', function(event) {
-         event.preventDefault(); 
-            window.location.href = 'http://localhost:8502';
-        });
-        
-    </script>
+                // Show server messages from query params (error or registered)
+                (function showMessageFromQuery(){
+                        const params = new URLSearchParams(window.location.search);
+                        const msgEl = document.getElementById('message');
+                        if (params.has('error')){
+                                msgEl.textContent = decodeURIComponent(params.get('error'));
+                        } else if (params.has('registered')){
+                                msgEl.style.color = '#b6f5b6';
+                                msgEl.textContent = 'Registration successful. Please log in.';
+                        }
+                        // remove query params from URL
+                        if (params.has('error') || params.has('registered')){
+                                history.replaceState(null, '', window.location.pathname);
+                        }
+                })();
+        </script>
 </body>
 </html>

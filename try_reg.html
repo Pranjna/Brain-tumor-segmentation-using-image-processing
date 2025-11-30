@@ -55,13 +55,14 @@
 <body>
     <div class="register-container">
         <h1>Registration</h1>
-        <form id="registerForm" action="#" method="POST" onsubmit="return validateForm()">
+        <form id="registerForm" action="/register" method="POST" onsubmit="return validateForm()">
     <input type="text" name="name" id="name" placeholder="Name" required>
     <input type="text" name="doctor_id" id="doctor_id" placeholder="Doctor ID" required>
     <input type="tel" name="phone" id="phone" placeholder="Phone Number" required>
     <input type="email" name="email" id="email" placeholder="Email" required>
     <input type="password" name="password" id="password" placeholder="Set Password" required>
     <input type="password" name="confirm_password" id="confirm_password" placeholder="Confirm Password" required>
+    <div id="message" style="color: #ffcccc; margin-bottom:10px;"></div>
     <button type="submit">Register</button>
     <p class="login-text">Already have an account? <a href="login_1.html">Login here</a></p>
   </form>
@@ -104,14 +105,20 @@
         return false;
       }
 
-      // All validations passed
-      return true;
-    }
-        document.querySelector('form').addEventListener('submit', function(event) {
-            event.preventDefault();
-            alert('Registration successful! You can now log in with your credentials.');
-            window.location.href = 'main_1.html';
-        });
-    </script>
-</body>s
-</html>
+        // All validations passed
+        return true;
+      }
+        // Show server messages from query params (error)
+        (function showMessageFromQuery(){
+          const params = new URLSearchParams(window.location.search);
+          const msgEl = document.getElementById('message');
+          if (params.has('error')){
+            msgEl.textContent = decodeURIComponent(params.get('error'));
+          }
+          if (params.has('error')){
+            history.replaceState(null, '', window.location.pathname);
+          }
+        })();
+      </script>
+    </body>
+    </html>
