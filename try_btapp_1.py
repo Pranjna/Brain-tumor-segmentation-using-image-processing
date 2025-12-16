@@ -2,9 +2,104 @@ import cv2
 import numpy as np
 import streamlit as st
 from tensorflow.keras.models import load_model
+from tensorflow.keras.utils import get_custom_objects
+import tensorflow as tf
 
-# Load the pretrained ViT model
-model = load_model('brain_tumor_classifier.h5')
+# Compatibility shim for models saved with a standalone `keras` DTypePolicy
+class DTypePolicy:
+    def __init__(self, name=None, **kwargs):
+        self.name = name or 'float32'
+        self.compute_dtype = tf.float32
+        self.variable_dtype = tf.float32
+
+    @classmethod
+    def from_config(cls, config):
+        return cls(**(config or {}))
+
+    def get_config(self):
+        return {'name': self.name}
+
+get_custom_objects()['DTypePolicy'] = DTypePolicy
+
+# Compatibility shim for InputLayer that accepts 'batch_shape' kwarg
+from tensorflow.keras.layers import InputLayer as _KInputLayer
+
+class CompatInputLayer(_KInputLayer):
+    def __init__(self, batch_shape=None, **kwargs):
+        if batch_shape is not None and 'batch_input_shape' not in kwargs:
+            kwargs['batch_input_shape'] = tuple(batch_shape)
+        super().__init__(**kwargs)
+
+get_custom_objects()['InputLayer'] = CompatInputLayer
+
+# Load the pretrained ViT model with diagnostics
+model = None
+try:
+    model = load_model('brain_tumor_classifier.h5', compile=False)
+except Exception as e:
+    import traceback, h5py
+    tb = traceback.format_exc()
+    # If run under Streamlit show diagnostic info to the app
+    try:
+        st.error("Model load failed — see traceback below")
+        st.text(tb)
+    except Exception:
+        print("Model load failed:\n", tb)
+
+    # Try to inspect the HDF5 file to give clues
+    try:
+        with h5py.File('brain_tumor_classifier.h5', 'r') as f:
+            keys = list(f.keys())
+            try:
+                st.write("HDF5 top-level keys:", keys)
+            except Exception:
+                print("HDF5 top-level keys:", keys)
+            # show whether model config is present
+            model_config = f.attrs.get('model_config') or f.attrs.get('model_config'.encode())
+            if model_config is not None:
+                try:
+                    st.write("HDF5 contains 'model_config' attribute (model architecture saved)")
+                except Exception:
+                    print("HDF5 contains 'model_config' attribute (model architecture saved)")
+            else:
+                try:
+                    st.write("No 'model_config' attr found — file may only contain weights")
+                except Exception:
+                    print("No 'model_config' attr found — file may only contain weights")
+    except Exception as e2:
+        try:
+            st.write(f"Failed to inspect HDF5: {e2}")
+        except Exception:
+            print("Failed to inspect HDF5:", e2)
+    # If the failure is due to an unexpected 'batch_shape' kwarg in InputLayer,
+    # provide a compatibility shim and retry loading.
+    try:
+        from tensorflow.keras.layers import InputLayer as _KInputLayer
+        from tensorflow.keras.utils import get_custom_objects
+
+        class CompatInputLayer(_KInputLayer):
+            def __init__(self, batch_shape=None, **kwargs):
+                if batch_shape is not None and 'batch_input_shape' not in kwargs:
+                    kwargs['batch_input_shape'] = tuple(batch_shape)
+                super().__init__(**kwargs)
+
+        get_custom_objects()['InputLayer'] = CompatInputLayer
+        try:
+            model = load_model('brain_tumor_classifier.h5', compile=False)
+            try:
+                st.success('Model loaded successfully with CompatInputLayer shim')
+            except Exception:
+                print('Model loaded successfully with CompatInputLayer shim')
+        except Exception as e3:
+            try:
+                st.error('Retry with CompatInputLayer failed — see traceback')
+                st.text(traceback.format_exc())
+            except Exception:
+                print('Retry with CompatInputLayer failed')
+                print(traceback.format_exc())
+    except Exception as e_shim:
+        # If we can't create the shim, just continue — diagnostics already printed
+        print('Could not apply CompatInputLayer shim:', e_shim)
 categories = ['glioma', 'meningioma', 'notumor', 'pituitary']
 
 # Streamlit app setup
@@ -39,8 +134,11 @@ if submit_button:
                 img_resized = cv2.resize(image, (128, 128)) / 255.0
                 img_reshaped = img_resized.reshape(1, 128, 128, 1)
 
-        # Make the prediction
-                prediction = model.predict(img_reshaped)
+                # Make the prediction (only if model loaded)
+                if model is None:
+                    st.error("Model not loaded — prediction unavailable. Check diagnostics above.")
+                else:
+                    prediction = model.predict(img_reshaped)
                 class_index = np.argmax(prediction)
                 tumor_type = categories[class_index]
                 confidence = prediction[0][class_index]
