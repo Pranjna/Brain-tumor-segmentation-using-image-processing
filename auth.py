@@ -28,7 +28,7 @@ def get_db():
 def init_db():
     db = get_db()
     cursor = db.cursor()
-    cursor.execute(
+    cursor.executescript(
         '''
         CREATE TABLE IF NOT EXISTS users (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -38,7 +38,16 @@ def init_db():
             email TEXT NOT NULL UNIQUE,
             password_hash TEXT NOT NULL,
             created_at TEXT NOT NULL
-        )
+        );
+        CREATE TABLE IF NOT EXISTS scan_history (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            user_id INTEGER NOT NULL,
+            patient_name TEXT,
+            tumor_type TEXT,
+            confidence REAL,
+            scan_date TEXT,
+            FOREIGN KEY(user_id) REFERENCES users(id)
+        );
         '''
     )
     db.commit()
