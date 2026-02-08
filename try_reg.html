@@ -1,124 +1,243 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TUMOR VUE - Registration</title>
-    <style>
-        body {
-            background-color: #0b0c1b;
-            color: white;
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-        }
-        .register-container {
-            background-color: #1a1a1a;
-            padding: 40px;
-            border: 1px solid white;
-            border-radius: 10px;
-            width: 400px;
-            text-align: center;
-        }
-        .register-container h1 {
-            margin-bottom: 20px;
-        }
-        .register-container input[type="text"],
-        .register-container input[type="email"],
-        .register-container input[type="tel"],
-        .register-container input[type="password"] {
-            width: 100%;
-            padding: 10px;
-            margin: 10px 0;
-            border: none;
-            border-radius: 5px;
-        }
-        .register-container button {
-            width: 100%;
-            padding: 10px;
-            background-color: #333;
-            color: white;
-            border: 1px solid white;
-            border-radius: 5px;
-            cursor: pointer;
-            margin-top: 20px;
-        }
-        .register-container button:hover {
-            background-color: #444;
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tumor Vue - Register</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --primary-color: #6c5ce7;
+      --secondary-color: #a29bfe;
+      --bg-color: #0f0c29;
+      --card-bg: rgba(255, 255, 255, 0.05);
+      --text-color: #ffffff;
+      --error-color: #ff7675;
+      --success-color: #55efc4;
+    }
+
+    body {
+      background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
+      color: var(--text-color);
+      font-family: 'Inter', sans-serif;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      overflow: hidden;
+    }
+
+    .register-container {
+      background: var(--card-bg);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 20px;
+      padding: 40px;
+      width: 400px;
+      /* Slightly wider for more fields */
+      text-align: center;
+      box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+      animation: fadeIn 0.8s ease-out;
+      max-height: 90vh;
+      /* Ensure it fits on smaller screens */
+      overflow-y: auto;
+    }
+
+    /* Scrollbar styling for the container */
+    .register-container::-webkit-scrollbar {
+      width: 8px;
+    }
+
+    .register-container::-webkit-scrollbar-track {
+      background: rgba(255, 255, 255, 0.05);
+    }
+
+    .register-container::-webkit-scrollbar-thumb {
+      background: rgba(255, 255, 255, 0.2);
+      border-radius: 4px;
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .logo {
+      width: 70px;
+      /* Slightly smaller to fit content */
+      height: auto;
+      margin-bottom: 10px;
+      filter: drop-shadow(0 0 10px rgba(108, 92, 231, 0.5));
+    }
+
+    h1 {
+      margin: 5px 0 5px;
+      font-weight: 700;
+      letter-spacing: -0.5px;
+      background: linear-gradient(to right, #fff, #a29bfe);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .slogan {
+      font-size: 0.85em;
+      color: #b2bec3;
+      margin-bottom: 25px;
+      font-style: italic;
+    }
+
+    input {
+      width: 100%;
+      padding: 12px 15px;
+      margin: 8px 0;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 8px;
+      color: white;
+      font-size: 14px;
+      box-sizing: border-box;
+      transition: all 0.3s ease;
+    }
+
+    input:focus {
+      outline: none;
+      border-color: var(--secondary-color);
+      background: rgba(255, 255, 255, 0.1);
+      box-shadow: 0 0 0 4px rgba(108, 92, 231, 0.1);
+    }
+
+    button {
+      width: 100%;
+      padding: 12px;
+      background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      margin-top: 20px;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+
+    button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 5px 15px rgba(108, 92, 231, 0.4);
+    }
+
+    .login-text {
+      margin-top: 20px;
+      font-size: 14px;
+      color: #dfe6e9;
+    }
+
+    .login-text a {
+      color: var(--secondary-color);
+      text-decoration: none;
+      font-weight: 500;
+    }
+
+    .login-text a:hover {
+      text-decoration: underline;
+    }
+
+    #message {
+      font-size: 14px;
+      margin-bottom: 15px;
+      min-height: 20px;
+      text-align: left;
+      padding: 0 5px;
+    }
+  </style>
 </head>
+
 <body>
-    <div class="register-container">
-        <h1>Registration</h1>
-        <form id="registerForm" action="/register" method="POST" onsubmit="return validateForm()">
-    <input type="text" name="name" id="name" placeholder="Name" required>
-    <input type="text" name="doctor_id" id="doctor_id" placeholder="Doctor ID" required>
-    <input type="tel" name="phone" id="phone" placeholder="Phone Number" required>
-    <input type="email" name="email" id="email" placeholder="Email" required>
-    <input type="password" name="password" id="password" placeholder="Set Password" required>
-    <input type="password" name="confirm_password" id="confirm_password" placeholder="Confirm Password" required>
-    <div id="message" style="color: #ffcccc; margin-bottom:10px;"></div>
-    <button type="submit">Register</button>
-    <p class="login-text">Already have an account? <a href="login_1.html">Login here</a></p>
-  </form>
-    </div>
-    <script>function validateForm() {
+  <div class="register-container">
+    <img src="brain.png" alt="Brain Logo" class="logo">
+    <h1>Tumor Vue</h1>
+    <p class="slogan">An AI Based Brain Tumor Detector</p>
+
+    <form id="registerForm" action="/register" method="POST" onsubmit="return validateForm()">
+      <input type="text" name="name" id="name" placeholder="Full Name" required>
+      <input type="text" name="doctor_id" id="doctor_id" placeholder="Doctor ID" required>
+      <input type="tel" name="phone" id="phone" placeholder="Phone Number" required>
+      <input type="email" name="email" id="email" placeholder="Email Address" required>
+      <input type="password" name="password" id="password" placeholder="Set Password" required>
+      <input type="password" name="confirm_password" id="confirm_password" placeholder="Confirm Password" required>
+
+      <div id="message"></div>
+
+      <button type="submit">Register</button>
+      <p class="login-text">Already have an account? <a href="login_1.html">Login here</a></p>
+    </form>
+  </div>
+
+  <script>
+    function validateForm() {
       const name = document.getElementById("name").value.trim();
       const doctorId = document.getElementById("doctor_id").value.trim();
       const phone = document.getElementById("phone").value.trim();
       const email = document.getElementById("email").value.trim();
       const password = document.getElementById("password").value;
       const confirmPassword = document.getElementById("confirm_password").value;
+      const msgEl = document.getElementById('message');
+
+      msgEl.textContent = "";
+      msgEl.style.color = "var(--error-color)";
 
       const doctorIdRegex = /^[a-zA-Z0-9]{4,}$/;
       const phoneRegex = /^[0-9]{10}$/;
 
       if (name === "") {
-        alert("Name is required.");
+        msgEl.textContent = "Name is required.";
         return false;
       }
 
       if (!doctorIdRegex.test(doctorId)) {
-        alert("Doctor ID must be at least 4 alphanumeric characters.");
+        msgEl.textContent = "Doctor ID must be at least 4 alphanumeric characters.";
         return false;
       }
 
       if (!phoneRegex.test(phone)) {
-        alert("Phone number must be 10 digits.");
+        msgEl.textContent = "Phone number must be 10 digits.";
         return false;
       }
 
-      // Email field uses built-in validation
-
       if (password.length < 6) {
-        alert("Password must be at least 6 characters.");
+        msgEl.textContent = "Password must be at least 6 characters.";
         return false;
       }
 
       if (password !== confirmPassword) {
-        alert("Passwords do not match.");
+        msgEl.textContent = "Passwords do not match.";
         return false;
       }
 
-        // All validations passed
-        return true;
+      return true;
+    }
+
+    // Show server messages
+    (function showMessageFromQuery() {
+      const params = new URLSearchParams(window.location.search);
+      const msgEl = document.getElementById('message');
+      if (params.has('error')) {
+        msgEl.style.color = "var(--error-color)";
+        msgEl.textContent = decodeURIComponent(params.get('error'));
+        history.replaceState(null, '', window.location.pathname);
       }
-        // Show server messages from query params (error)
-        (function showMessageFromQuery(){
-          const params = new URLSearchParams(window.location.search);
-          const msgEl = document.getElementById('message');
-          if (params.has('error')){
-            msgEl.textContent = decodeURIComponent(params.get('error'));
-          }
-          if (params.has('error')){
-            history.replaceState(null, '', window.location.pathname);
-          }
-        })();
-      </script>
-    </body>
-    </html>
+    })();
+  </script>
+</body>
+
+</html>

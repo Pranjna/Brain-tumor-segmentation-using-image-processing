@@ -1,33 +1,133 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tumor Grading Application</title>
-    <link rel="stylesheet" href="styles.css">
+    <title>Tumor Vue - Grading</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #6c5ce7;
+            --secondary-color: #a29bfe;
+            --bg-color: #0f0c29;
+            --card-bg: rgba(255, 255, 255, 0.05);
+            --text-color: #ffffff;
+        }
+
+        body {
+            background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
+            color: var(--text-color);
+            font-family: 'Inter', sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .container {
+            background: var(--card-bg);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            padding: 40px;
+            width: 400px;
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+        }
+
+        h1 {
+            text-align: center;
+            margin-top: 0;
+            background: linear-gradient(to right, #fff, #a29bfe);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: #dfe6e9;
+        }
+
+        input,
+        select {
+            width: 100%;
+            padding: 12px;
+            margin-bottom: 20px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            color: white;
+            font-family: inherit;
+            box-sizing: border-box;
+        }
+
+        input:focus,
+        select:focus {
+            outline: none;
+            border-color: var(--secondary-color);
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        option {
+            background-color: #2d3436;
+            color: white;
+        }
+
+        button {
+            width: 100%;
+            padding: 12px;
+            background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+        }
+
+        #report-container {
+            margin-top: 20px;
+            padding: 15px;
+            border-radius: 8px;
+            background: rgba(255, 255, 255, 0.05);
+            display: none;
+            /* Hidden by default */
+        }
+    </style>
 </head>
+
 <body>
     <div class="container">
-        <h1>Tumor Grading Application</h1>
+        <h1>Tumor Grading</h1>
         <form id="tumor-form">
-            <label for="tumor-type">Tumor Type:</label>
-            <input type="text" id="tumor-type" name="tumor-type"><br><br>
-            <label for="tumor-grade">Tumor Grade:</label>
+            <label for="tumor-type">Tumor Type</label>
+            <input type="text" id="tumor-type" name="tumor-type" placeholder="e.g. Glioma">
+
+            <label for="tumor-grade">Tumor Grade</label>
             <select id="tumor-grade" name="tumor-grade">
-                <option value="1">Grade 1</option>
+                <option value="1">Grade 1 (Low Risk)</option>
                 <option value="2">Grade 2</option>
                 <option value="3">Grade 3</option>
-                <option value="4">Grade 4</option>
-            </select><br><br>
-            <button id="submit-btn">Generate Report</button>
+                <option value="4">Grade 4 (High Risk)</option>
+            </select>
+
+            <button id="submit-btn" type="submit">Generate Report</button>
         </form>
         <div id="report-container"></div>
     </div>
 
+    <!-- Assuming script.js exists as per original file -->
     <script src="script.js"></script>
 </body>
+
 </html>
-
-
-
-
